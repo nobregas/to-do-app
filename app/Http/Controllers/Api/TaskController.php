@@ -5,52 +5,45 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\StoreTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
-use App\Http\Resources\TaskResource;
-use App\Repositories\Interfaces\TaskRepositoryInterface;
+use App\Services\Interface\TaskServiceInterface;
 
 class TaskController extends Controller
 {
 
-    private TaskRepositoryInterface $taskRepository;
+    private TaskServiceInterface $taskService;
 
-    public function __construct(TaskRepositoryInterface $taskRepository)
+    public function __construct(TaskServiceInterface $taskService)
     {
-        $this->taskRepository = $taskRepository;
+        $this->taskService = $taskService;
     }
 
     public function index()
     {
-        $tasks = $this->taskRepository->all();
-
-        return TaskResource::collection($tasks);
+        return $this->taskService->findAll();
     }
 
     public function store(StoreTaskRequest $request)
     {
-        $task = $this->taskRepository->create($request->validated());
+        $task = $this->taskService->create($request);
 
-        return (new TaskResource($task))
+        return ($task)
             ->response()
             ->setStatusCode(201);
     }
 
     public function show($id)
     {
-        $task = $this->taskRepository->find($id);
-
-        return new TaskResource($task);
+        return $this->taskService->find($id);
     }
 
     public function update(UpdateTaskRequest $request, $id)
     {
-        $task = $this->taskRepository->update($id, $request->validated());
-
-        return new TaskResource($task);
+        return $this->taskService->update($id, $request);
     }
 
     public function destroy($id)
     {
-        $this->taskRepository->delete($id);
+        $this->taskService->delete($id);
 
         return response()->json(null, 204);
     }

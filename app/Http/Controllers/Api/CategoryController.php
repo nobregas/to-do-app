@@ -28,16 +28,14 @@ class CategoryController extends Controller
     {
         $category = $this->categoryService->create($request);
 
-        return (new CategoryResource($category))
+        return ($category)
             ->response()
             ->setStatusCode(201);
     }
 
     public function update(UpdateCategoryRequest $request, $id)
     {
-        $category =  $this->categoryService->update($id, $request);
-
-        return new CategoryResource($category);
+        return $this->categoryService->update($id, $request);
     }
 
     public function delete($id)

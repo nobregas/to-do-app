@@ -10,8 +10,10 @@ use App\Repositories\Interfaces\TaskRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\Impl\AuthService;
 use App\Services\Impl\CategoryService;
+use App\Services\Impl\TaskService;
 use App\Services\Interface\AuthServiceInterface;
 use App\Services\Interface\CategoryServiceInterface;
+use App\Services\Interface\TaskServiceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -44,6 +46,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             CategoryServiceInterface::class,
             CategoryService::class
+        );
+
+        $this->app->bind(
+            TaskServiceInterface::class,
+            TaskService::class
         );
     }
 
