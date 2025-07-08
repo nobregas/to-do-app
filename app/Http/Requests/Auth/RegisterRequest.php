@@ -4,6 +4,16 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ * schema="UserResource",
+ * type="object",
+ * title="Recurso de Usuário",
+ * @OA\Property(property="id", type="string", format="uuid", description="ID do usuário"),
+ * @OA\Property(property="name", type="string", description="Nome do usuário"),
+ * @OA\Property(property="email", type="string", format="email", description="Email do usuário")
+ * )
+ */
 class RegisterRequest extends FormRequest
 {
     /**

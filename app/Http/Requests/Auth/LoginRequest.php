@@ -4,6 +4,16 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ * schema="LoginSuccessResource",
+ * type="object",
+ * title="Resposta de Login/Registro Bem-Sucedido",
+ * @OA\Property(property="access_token", type="string", description="Token de acesso Bearer"),
+ * @OA\Property(property="token_type", type="string", example="Bearer"),
+ * @OA\Property(property="user", ref="#/components/schemas/UserResource")
+ * )
+ */
 class LoginRequest extends FormRequest
 {
     /**

@@ -1,0 +1,22 @@
+# Arquivo de configuração para o PHPStan/Larastan
+
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    # Onde o PHPStan deve procurar por código para analisar.
+    # 'app' é o mais importante. Você pode adicionar 'routes', 'database', etc.
+    paths:
+        - app/
+
+    # O "nível de rigor" da análise, de 0 (mais baixo) a 9 (mais alto).
+    #
+    # DICA: Comece com um nível mais baixo, como 5 ou 6.
+    # É melhor ter um nível médio sem erros do que um nível alto com centenas de erros que você nunca corrige.
+    # Aumente o nível gradualmente conforme for corrigindo os problemas.
+    level: 6
+
+    # Opcional, mas recomendado: Ignora erros de "métodos mágicos" em classes específicas.
+    # Por exemplo, se você usa um Trait que adiciona métodos dinamicamente.
+    # universalObjectCratesClasses:
+    #     - App\Services\SomeMagicService
