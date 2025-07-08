@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Resources\TaskResource;
 use App\Services\Interface\AuthServiceInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Request;
 
 class AuthController extends Controller
@@ -14,17 +16,17 @@ class AuthController extends Controller
     {
     }
 
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request):  TaskResource
     {
         return $this->authService->register($request);
     }
 
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request):  TaskResource
     {
         return $this->authService->login($request);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $this->authService->logout($request->user());
 
