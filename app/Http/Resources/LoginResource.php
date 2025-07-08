@@ -11,7 +11,7 @@ class LoginResource extends JsonResource
 
     public String $token_type = "Bearer";
 
-    public function __construct($resource, $access_token)
+    public function __construct($resource, String $access_token)
     {
         parent::__construct($resource);
         $this->access_token = $access_token;
