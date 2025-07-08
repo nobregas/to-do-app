@@ -9,7 +9,7 @@ class TaskAlreadyCompletedException extends ApiException
 {
     public function __construct()
     {
-        parent::__construct("Task already completed", 409);
+        parent::__construct(409, "Task already completed");
     }
 
 }
