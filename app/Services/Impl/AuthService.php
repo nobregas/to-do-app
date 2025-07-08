@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\Interface\AuthServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 readonly class AuthService implements AuthServiceInterface
 {
@@ -26,12 +27,22 @@ readonly class AuthService implements AuthServiceInterface
         $user = $this->userRepository->create($request->validated());
         $token = $user->createToken('auth-token')->plainTextToken;
 
+        Log::info('User registered successfully.', [
+            'user_id' => $user->id,
+            'email' => $user->email
+        ]);
+
+
         return new RegisterResource($user, $token);
     }
 
     public function login(LoginRequest $request): LoginResource
     {
         if (!Auth::attempt($request->validated())) {
+            Log::warning('Failed login attempt.', [
+                'email' => $request->email
+            ]);
+
             throw new UnauthorizedException;
         }
 
@@ -43,11 +54,19 @@ readonly class AuthService implements AuthServiceInterface
 
         $token =  $user->createToken('auth-token')->plainTextToken;
 
+        Log::info('User authenticated successfully.', [
+            'user_id' => $user->id
+        ]);
+
         return new LoginResource($user, $token);
     }
 
     public function logout(User $user): void
     {
         $user->currentAccessToken()->delete();
+
+        Log::info('User logged out.', [
+            'user_id' => $user->id
+        ]);
     }
 }

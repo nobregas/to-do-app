@@ -8,6 +8,8 @@ use App\Http\Resources\CategoryResource;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Services\Interface\CategoryServiceInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 readonly class CategoryService implements CategoryServiceInterface
 {
@@ -33,17 +35,34 @@ readonly class CategoryService implements CategoryServiceInterface
     {
         $category = $this->categoryRepository->create($input->validated());
 
+        Log::info('Category created successfully.', [
+            'category_id' => $category->id,
+            'user_id' => Auth::id(),
+            'category_name' => $category->name,
+        ]);
+
         return new CategoryResource($category);
     }
 
     public function update($id, UpdateCategoryRequest $input): CategoryResource
     {
         $category =  $this->categoryRepository->update($id, $input->validated());
+
+        Log::info('Category updated successfully.', [
+            'category_id' => $category->id,
+            'user_id' => Auth::id(),
+        ]);
+
         return new CategoryResource($category);
     }
 
     public function delete($id): void
     {
+        Log::info('Attempting to delete category.', [
+            'category_id' => $id,
+            'user_id' => Auth::id(),
+        ]);
+
         $this->categoryRepository->delete($id);
     }
 }
