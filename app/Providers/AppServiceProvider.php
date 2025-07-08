@@ -8,8 +8,7 @@ use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\TaskRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-
-use App\Services\AuthService;
+use App\Services\Impl\AuthService;
 use App\Services\Interface\AuthServiceInterface;
 use Illuminate\Support\ServiceProvider;
 

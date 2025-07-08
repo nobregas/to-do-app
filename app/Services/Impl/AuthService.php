@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Impl;
 
 use App\Exceptions\exceptions\UnauthorizedException;
 use App\Http\Requests\Auth\LoginRequest;
