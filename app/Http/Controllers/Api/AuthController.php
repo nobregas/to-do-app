@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Request;
 
 class AuthController extends Controller
 {
-    public function __construct(private AuthServiceInterface $authService)
+    public function __construct(private readonly AuthServiceInterface $authService)
     {
     }
 
