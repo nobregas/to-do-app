@@ -7,6 +7,8 @@ use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Services\Interface\CategoryServiceInterface;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CategoryController extends Controller
 {
@@ -14,17 +16,17 @@ class CategoryController extends Controller
     {
     }
 
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         return $this->categoryService->findAll();
     }
 
-    public function show($id)
+    public function show(int $id):  CategoryResource
     {
         return $this->categoryService->find($id);
     }
 
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request):  JsonResponse
     {
         $category = $this->categoryService->create($request);
 
@@ -33,12 +35,12 @@ class CategoryController extends Controller
             ->setStatusCode(201);
     }
 
-    public function update(UpdateCategoryRequest $request, $id)
+    public function update(UpdateCategoryRequest $request,int $id): CategoryResource
     {
         return $this->categoryService->update($id, $request);
     }
 
-    public function delete($id)
+    public function delete(int $id): JsonResponse
     {
         $this->categoryService->delete($id);
 
