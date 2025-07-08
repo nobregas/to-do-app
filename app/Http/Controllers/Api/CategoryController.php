@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
-use App\Http\Resources\TaskResource;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 
 class CategoryController extends Controller
