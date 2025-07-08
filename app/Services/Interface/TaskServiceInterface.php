@@ -2,7 +2,7 @@
 
 namespace App\Services\Interface;
 
-interface TaskService
+interface TaskServiceInterface
 {
 
 }

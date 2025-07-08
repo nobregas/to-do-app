@@ -12,7 +12,7 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\Interface\AuthServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
-class AuthService implements AuthServiceInterface
+readonly class AuthService implements AuthServiceInterface
 {
     private UserRepositoryInterface $userRepository;
 

@@ -6,35 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
-use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Services\Interface\CategoryServiceInterface;
 
 class CategoryController extends Controller
 {
-    private CategoryRepositoryInterface $categoryRepository;
-
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    public function __construct(private readonly CategoryServiceInterface $categoryService)
     {
-        $this->categoryRepository = $categoryRepository;
     }
-
 
     public function index()
     {
-        $categories = $this->categoryRepository->all();
-
-        return CategoryResource::collection($categories);
+        return $this->categoryService->findAll();
     }
 
     public function show($id)
     {
-        $category = $this->categoryRepository->find($id);
-
-        return new CategoryResource($category);
+        return $this->categoryService->find($id);
     }
 
     public function store(StoreCategoryRequest $request)
     {
-        $category = $this->categoryRepository->create($request->validated());
+        $category = $this->categoryService->create($request);
 
         return (new CategoryResource($category))
             ->response()
@@ -43,14 +35,14 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, $id)
     {
-        $category =  $this->categoryRepository->update($id, $request->validated());
+        $category =  $this->categoryService->update($id, $request);
 
         return new CategoryResource($category);
     }
 
     public function delete($id)
     {
-        $this->categoryRepository->delete($id);
+        $this->categoryService->delete($id);
 
         return response()->json(null, 204);
     }
