@@ -119,7 +119,68 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Login bem-sucedido",
+                        "description": "Código de autenticação de dois fatores enviado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Two-factor authentication code has been sent to your email."
+                                        },
+                                        "requires_2fa": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação ou credenciais inválidas"
+                    }
+                }
+            }
+        },
+        "/api/verify-2fa": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Verifica o código de autenticação de dois fatores",
+                "description": "Verifica o código de autenticação de dois fatores enviado para o e-mail do usuário.",
+                "operationId": "verify2FA",
+                "requestBody": {
+                    "description": "Código de verificação",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "code"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Autenticação bem-sucedida",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -128,8 +189,11 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "Código inválido ou expirado"
+                    },
                     "422": {
-                        "description": "Erro de validação ou credenciais inválidas"
+                        "description": "Erro de validação"
                     }
                 }
             }

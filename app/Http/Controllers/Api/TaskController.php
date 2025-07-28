@@ -180,4 +180,9 @@ class TaskController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function forgotPassword(Request $request): JsonResponse
+    {
+        return null;
+    }
 }

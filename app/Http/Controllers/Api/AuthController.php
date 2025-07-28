@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\LoginResource;
 use App\Http\Resources\RegisterResource;
+use App\Models\User;
 use App\Services\Interface\AuthServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Request;
@@ -69,8 +70,11 @@ class AuthController extends Controller
      * ),
      * @OA\Response(
      * response=200,
-     * description="Login bem-sucedido",
-     * @OA\JsonContent(ref="#/components/schemas/LoginSuccessResource")
+     * description="Código de autenticação de dois fatores enviado",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Two-factor authentication code has been sent to your email."),
+     * @OA\Property(property="requires_2fa", type="boolean", example=true)
+     * )
      * ),
      * @OA\Response(
      * response=422,
@@ -78,9 +82,57 @@ class AuthController extends Controller
      * )
      * )
      */
-    public function login(LoginRequest $request):  LoginResource
+    public function login(LoginRequest $request): JsonResponse
     {
-        return $this->authService->login($request);
+        $result = $this->authService->login($request);
+        return response()->json($result);
+    }
+
+    /**
+     * @OA\Post(
+     * path="/api/verify-2fa",
+     * operationId="verify2FA",
+     * tags={"Autenticação"},
+     * summary="Verifica o código de autenticação de dois fatores",
+     * description="Verifica o código de autenticação de dois fatores enviado para o e-mail do usuário.",
+     * @OA\RequestBody(
+     * required=true,
+     * description="Código de verificação",
+     * @OA\JsonContent(
+     * required={"email","code"},
+     * @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+     * @OA\Property(property="code", type="string", example="123456")
+     * ),
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Autenticação bem-sucedida",
+     * @OA\JsonContent(ref="#/components/schemas/LoginSuccessResource")
+     * ),
+     * @OA\Response(
+     * response=401,
+     * description="Código inválido ou expirado"
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Erro de validação"
+     * )
+     * )
+     */
+    public function verifyTwoFactor(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'code' => 'required|string|size:6'
+        ]);
+
+        $user = User::where('email', $request->email)->firstOrFail();
+        $result = $this->authService->verifyTwoFactorCode($user, $request->code);
+
+        return response()->json([
+            'token' => $result['token'],
+            'user' => new LoginResource($result['user'], $result['token'])
+        ]);
     }
 
     /**

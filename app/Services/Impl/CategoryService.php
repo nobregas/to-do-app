@@ -65,4 +65,6 @@ readonly class CategoryService implements CategoryServiceInterface
 
         $this->categoryRepository->delete($id);
     }
+
+    
 }

@@ -13,6 +13,7 @@ Route::get('/user', function (Request $request) {
 // Public Routes
 Route::post("/login", [AuthController::class, 'login']);
 Route::post("/register", [AuthController::class, 'register']);
+Route::post("/verify-2fa", [AuthController::class, 'verifyTwoFactor']);
 
 // Private Routes
 Route::middleware('auth:sanctum')->group(function () {
